@@ -1,6 +1,20 @@
 from django.db import models
 
 
+class AircraftManager(models.Manager):
+    def filter_by_criteria(self, make=None, model=None, active=True):
+        """
+        Filters aircraft based on make, model, and activity status.
+        Allows for flexible querying with optional parameters.
+        """
+        queryset = self.get_queryset()
+        if make:
+            queryset = queryset.filter(make__iexact=make)
+        if model:
+            queryset = queryset.filter(model__iexact=model)
+        return queryset.filter(active=active)
+
+
 class Aircraft(models.Model):
     user_id = models.IntegerField()
     guid = models.CharField(max_length=100, unique=True)
@@ -11,7 +25,7 @@ class Aircraft(models.Model):
     fnpt = models.IntegerField(default=0)
     make = models.CharField(max_length=100, blank=True, null=True)
     run2 = models.BooleanField(default=False)
-    class_type = models.IntegerField(default=0, db_column='class')
+    class_type = models.IntegerField(default=0, db_column="class")
     model = models.CharField(max_length=100)
     power = models.IntegerField(default=1)
     seats = models.IntegerField(default=0)
@@ -36,6 +50,8 @@ class Aircraft(models.Model):
     aircraft_code = models.CharField(max_length=100)
     default_launch = models.IntegerField(default=0)
     record_modified = models.DateTimeField()
+
+    objects = AircraftManager()
 
     def __str__(self):
         return f"{self.make} {self.model} ({self.guid})"

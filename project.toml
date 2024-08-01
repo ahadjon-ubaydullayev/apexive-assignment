@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.pre-commit]
+repos = [
+    {
+        repo = "https://github.com/psf/black",
+        rev = "19.10b0",
+        hooks = [
+            {
+                id = "black",
+                language_version = "python3",
+                stages = ["commit"],
+            },
+        ],
+    },
+    {
+        repo = "https://github.com/pre-commit/pre-commit-hooks",
+        rev = "v3.4.0",
+        hooks = [
+            {
+                id = "trailing-whitespace",
+            },
+            {
+                id = "check-merge-conflict",
+            },
+        ],
+    },
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^3.2"
+djangorestframework = "^3.12"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.0"
